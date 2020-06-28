@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yikang.dao.BlogMapper">
+
+    <sql id="if-title-author">
+        <if test="title != null">
+            and title = #{title}
+        </if>
+        <if test="author != null">
+            and author = #{author}
+        </if>
+    </sql>
+    <insert id="addBlog" parameterType="blog">
+        insert into blog (id, title, author, create_time, views)
+        values (#{blog.id}, #{blog.title}, #{blog.author}, #{blog.createTime}, #{blog.views})
+    </insert>
+    <select id="queryBlogIf" parameterType="map" resultType="blog">
+        select * from blog
+        <where>
+        <include refid="if-title-author"/>
+        </where>
+    </select>
+    <select id="queryBlogChoose" parameterType="map" resultType="blog">
+        select * from blog
+        <where>
+            <choose>
+                <when test="author != null">
+                    and author = #{author}
+                </when>
+                <when test="title != null">
+                    and title = #{title}
+                </when>
+                <otherwise>
+                    and views = 7
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <update id="updateBlog" parameterType="map">
+        update blog
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="author != null">
+                author = #{author},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="queryBlogByForeach" parameterType="map" resultType="blog">
+        select * from blog
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="queryBlogByForeach2" parameterType="arraylist" resultType="blog">
+        select * from blog
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

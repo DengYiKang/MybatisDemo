@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--注意配置中有顺序要求-->
+    <!--外部配置文件-->
+    <properties resource="db.properties">
+        <!--注意若有重复属性，则优先外部配置-->
+        <property name="username" value="root"/>
+        <property name="password" value="159753"/>
+    </properties>
+    <typeAliases>
+        <!--指定别名-->
+        <!--<typeAlias type="com.com.yikang.com.yikang.dao.model.User" alias="User"/>-->
+        <!--指定包裹下的java bean的别名，首字母大小写不敏感，官网建议小写-->
+        <package name="com.yikang.model"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/yikang/dao/UserMapper.xml"/>
+    </mappers>
+</configuration>
